@@ -69,8 +69,8 @@ export default function ReceiptPage() {
   const fixedMenuItems = [
     {
       type: 'item' as const,
-      quantity: 1,
-      name: 'flake雪花冰沙',
+      quantity: 2,
+      name: 'wafer 威化饼干',
     },
     {
       type: 'separator' as const,
@@ -78,18 +78,7 @@ export default function ReceiptPage() {
     {
       type: 'item' as const,
       quantity: 1,
-      name: '4块derivation鸡翅',
-    },
-    {
-      type: 'item' as const,
-      quantity: 1,
-      name: 'overlay堡',
-      comment: '不要　rebuild world',
-    },
-    {
-      type: 'item' as const,
-      quantity: 1,
-      name: 'nixpkgs全家桶',
+      name: '武汉热 GaN 面',
     },
     {
       type: 'separator' as const,
@@ -97,7 +86,27 @@ export default function ReceiptPage() {
     {
       type: 'item' as const,
       quantity: 1,
-      name: 'hydra冰茶',
+      name: 'm-LED 一口小蛋糕',
+      comment: '水源取自天然 quantum well',
+    },
+    {
+      type: 'separator' as const,
+    },
+    {
+      type: 'item' as const,
+      quantity: 1,
+      name: 'vdW 千层酥',
+    },
+    {
+      type: 'separator' as const,
+    },
+    {
+      type: 'separator' as const,
+    },
+    {
+      type: 'item' as const,
+      quantity: 1,
+      name: 'h-BN 水乳眼霜（赠品）',
     },
   ];
 
@@ -115,17 +124,17 @@ export default function ReceiptPage() {
           <Receipt
             ref={innerReceiptRef}
             header={{
-              orderType: '外带',
+              orderType: '堂食',
               orderId: attendeeName,
             }}
             menuItems={fixedMenuItems}
             deliveryOptions={{
               method: '柜台取餐',
               orderId: orderId.toString(),
-              barcodeContent: 'nixos.org',
+              barcodeContent: 'Kang Group',
             }}
             footer={{
-              signature: 'NixOS CN Meetup #1',
+              signature: 'KK Group 2025',
             }}
           />
         </div>
