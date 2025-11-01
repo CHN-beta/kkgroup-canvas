@@ -32,6 +32,8 @@
             python311Packages.setuptools
             darwin.apple_sdk.frameworks.CoreText
             turbo
+            pnpm
+            nodejs
           ];
         };
       }
