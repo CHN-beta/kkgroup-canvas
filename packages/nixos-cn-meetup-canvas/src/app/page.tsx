@@ -3,17 +3,18 @@
 import { Loader2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import Turnstile from 'react-turnstile';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useCheckinStore } from '@/lib/store';
-import { getAndIncrementOrderId } from './actions';
+
+let nextAttendeeId = 25000;
 
 export default function Home() {
   const [attendeeName, setAttendeeName] = useState('');
+  const [attendeeId, setAttendeeId] = useState(nextAttendeeId);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -27,16 +28,11 @@ export default function Home() {
   }, [isCheckedIn, router]);
 
   const handleCheckin = async () => {
-    if (!attendeeName.trim()) {
-      toast.error('请输入签到人姓名');
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      const assignedOrderId = await getAndIncrementOrderId();
-      setCheckinInfo(attendeeName.trim(), assignedOrderId);
+      setCheckinInfo(attendeeName.trim(), attendeeId);
+      nextAttendeeId = attendeeId + 1;
       router.push('/receipt');
     }
     catch (error) {
@@ -91,9 +87,23 @@ export default function Home() {
                 }}
                 className="text-lg py-6"
               />
-              <Turnstile
-                sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITEKEY!}
-                execution="render"
+              <Label htmlFor="attendee-id" className="text-base font-medium">
+                取餐号
+              </Label>
+              <Input
+                id="attendee-id"
+                type="number"
+                placeholder="请输入您的取餐号"
+                value={attendeeId}
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="none"
+                spellCheck="false"
+                disabled={isLoading}
+                onChange={(e) => {
+                  setAttendeeId(Number(e.target.value));
+                }}
+                className="text-lg py-6"
               />
             </div>
           </CardContent>
@@ -101,7 +111,7 @@ export default function Home() {
             <Button
               onClick={handleCheckin}
               className="w-full text-lg py-6"
-              disabled={!attendeeName.trim() || isLoading}
+//              disabled={!attendeeName.trim() || isLoading}
               size="lg"
             >
               {isLoading ? <Loader2Icon className="animate-spin" /> : null}

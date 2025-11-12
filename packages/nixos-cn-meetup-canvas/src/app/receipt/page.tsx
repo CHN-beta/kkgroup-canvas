@@ -17,10 +17,6 @@ export default function ReceiptPage() {
   const { attendeeName, orderId, clearCheckin } = useCheckinStore();
 
   useEffect(() => {
-    // 如果没有签到信息，重定向到首页
-    if (!attendeeName || !orderId) {
-      router.push('/');
-    }
   }, [attendeeName, orderId, router]);
 
   const handleNewCheckin = () => {
@@ -44,6 +40,14 @@ export default function ReceiptPage() {
   };
 
   const triggerPrint = async () => {
+    try {
+      const key = 'attendee-log';
+      const prev = localStorage.getItem(key) || '';
+      const line = `${attendeeName},${orderId}\n`;
+      localStorage.setItem(key, prev + line);
+    } catch (e) {
+      console.error('保存失败', e);
+    }
     if (innerReceiptRef.current) {
       try {
         const dataUrl = await domtoimage.toPng(innerReceiptRef.current, {
@@ -60,11 +64,6 @@ export default function ReceiptPage() {
     }
   };
 
-  // 如果没有签到信息，不显示任何内容
-  if (!attendeeName || !orderId) {
-    return null;
-  }
-
   // 固定的菜单项目，不允许修改
   const fixedMenuItems = [
     {
@@ -79,6 +78,7 @@ export default function ReceiptPage() {
       type: 'item' as const,
       quantity: 1,
       name: '武汉热 GaN 面',
+      comment: '没有胡萝卜缺陷',
     },
     {
       type: 'separator' as const,
@@ -86,7 +86,7 @@ export default function ReceiptPage() {
     {
       type: 'item' as const,
       quantity: 1,
-      name: 'm-LED 一口小蛋糕',
+      name: 'u-LED 三色小蛋糕',
       comment: '水源取自天然 quantum well',
     },
     {
@@ -106,7 +106,8 @@ export default function ReceiptPage() {
     {
       type: 'item' as const,
       quantity: 1,
-      name: 'h-BN 水乳眼霜（赠品）',
+      name: '（赠品）h-BN 水乳眼霜套装',
+      comment: '含 ODR 化妆镜',
     },
   ];
 
@@ -131,7 +132,7 @@ export default function ReceiptPage() {
             deliveryOptions={{
               method: '柜台取餐',
               orderId: orderId.toString(),
-              barcodeContent: 'Kang Group',
+              barcodeContent: 's.chn.moe/k',
             }}
             footer={{
               signature: 'KK Group 2025',

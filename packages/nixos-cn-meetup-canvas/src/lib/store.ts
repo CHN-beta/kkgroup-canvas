@@ -28,8 +28,8 @@ export const useCheckinStore = create<CheckinState>()(
 
       clearCheckin: () => {
         set((state) => {
-          state.attendeeName = null;
-          state.orderId = null;
+          state.attendeeName = "";
+          // state.orderId = null;
         });
       },
 
